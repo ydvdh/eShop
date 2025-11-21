@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Basket.API/Basket.API.csproj" Id="cc4fb73e-aa82-4cfe-9137-d6220360f1b7" />
   <Project Path="Catalog.API/Catalog.API.csproj" Id="1af89789-35e0-4280-9482-ac6ac2aafdc3" />
 </Solution>
