@@ -3,10 +3,11 @@ using Discount.API.Mappers;
 using Discount.API.Queries;
 using Discount.API.Repositories.Interfaces;
 using Grpc.Core;
+using MediatR;
 
 namespace Discount.API.Handlers;
 
-public class GetDiscountHandler
+public class GetDiscountHandler  : IRequestHandler<GetDiscountQuery, CouponDto>
 {
     private readonly IDiscountRepository _discountRepository;
 

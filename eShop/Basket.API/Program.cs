@@ -1,15 +1,22 @@
+using Basket.API.Data;
+using Basket.API.Data.Interfaces;
+using Basket.API.GrpcServices;
 using Basket.API.Handlers;
 using Basket.API.Repositories;
 using Basket.API.Repositories.Interfaces;
-using System.Reflection;
+using Discount.Grpc.Protos;
 using StackExchange.Redis;
-using Basket.API.Data.Interfaces;
-using Basket.API.Data;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IBasketRepository, BasketRepository>();
+
+//Grpc Service
+builder.Services.AddScoped<DiscountGrpcService>();
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
+    (cfg => cfg.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
