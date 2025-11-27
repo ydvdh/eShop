@@ -1,4 +1,5 @@
-﻿using Ordering.API.Commands;
+﻿using EventBus.Message.Events;
+using Ordering.API.Commands;
 using Ordering.API.DTOs;
 using Ordering.API.Entities;
 
@@ -90,6 +91,27 @@ public static class OrderMapper
             Expiration = dto.Expiration,
             Cvv = dto.Cvv,
             PaymentMethod = dto.PaymentMethod
+        };
+    }
+
+    public static CheckoutOrderCommand ToCheckoutOrderCommand(this BasketCheckoutEvent message)
+    {
+        return new CheckoutOrderCommand
+        {
+            UserName = message.UserName!,
+            TotalPrice = message.TotalPrice,
+            FirstName = message.FirstName!,
+            LastName = message.LastName!,
+            EmailAddress = message.EmailAddress!,
+            AddressLine = message.AddressLine!,
+            Country = message.Country!,
+            State = message.State!,
+            ZipCode = message.ZipCode!,
+            CardName = message.CardName!,
+            CardNumber = message.CardNumber!,
+            Expiration = message.Expiration!,
+            Cvv = message.CVV,
+            PaymentMethod = message.PaymentMethod
         };
     }
 }

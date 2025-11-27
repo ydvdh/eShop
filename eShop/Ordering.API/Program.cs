@@ -1,4 +1,7 @@
+using EventBus.Message.Common;
+using MassTransit;
 using Ordering.API.Data;
+using Ordering.API.EventBusConsumer;
 using Ordering.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,23 @@ builder.Services.AddApplicationServices();
 
 //Infra services
 builder.Services.AddInfraServices(builder.Configuration);
+
+//Mass Transit - RabbitMQ
+builder.Services.AddMassTransit(config =>
+{
+    config.AddConsumer<EventBusRabbitMQConsumer>();
+
+    config.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+
+        //provide the queue name with consumer settings
+        cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, c =>
+        {
+            c.ConfigureConsumer<EventBusRabbitMQConsumer>(ctx);
+        });
+    });
+});
 
 var app = builder.Build();
 

@@ -5,6 +5,7 @@ using Basket.API.Handlers;
 using Basket.API.Repositories;
 using Basket.API.Repositories.Interfaces;
 using Discount.Grpc.Protos;
+using MassTransit;
 using StackExchange.Redis;
 using System.Reflection;
 
@@ -48,6 +49,15 @@ builder.Services.AddSingleton(mux);
 
 // register IBasketContext -> BasketContext (singleton to match repository lifetime)
 builder.Services.AddSingleton<IBasketContext, BasketContext>();
+
+//Mass Transit - RabbitMQ
+builder.Services.AddMassTransit(config =>
+{
+    config.UsingRabbitMq((ct, cfg) =>
+    {
+        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+    });
+});
 
 var app = builder.Build();
 

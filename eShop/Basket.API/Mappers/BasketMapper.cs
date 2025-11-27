@@ -1,6 +1,8 @@
 ﻿using Basket.API.Commands;
+using Basket.API.DTOs;
 using Basket.API.Entities;
 using Basket.API.Responses;
+using EventBus.Message.Events;
 
 namespace Basket.API.Mappers;
 
@@ -35,6 +37,41 @@ public static class BasketMapper
                 ProductId = item.ProductId,
                 ProductName = item.ProductName
             }).ToList()
+        };
+    }
+
+    public static ShoppingCart ToEntity(this ShoppingCartResponse response)
+    {
+        return new ShoppingCart(response.UserName)
+        {
+            Items = response.Items.Select(item => new ShoppingCartItem
+            {
+                ProductId = item.ProductId,
+                ProductName = item.ProductName,
+                Price = item.Price,
+                Quantity = item.Quantity
+            }).ToList()
+        };
+    }
+
+    public static BasketCheckoutEvent ToBasketCheckoutEvent(this BasketCheckoutDto dto, ShoppingCart basket)
+    {
+        return new BasketCheckoutEvent
+        {
+            UserName = dto.UserName,
+            TotalPrice = basket.Items.Sum(item => item.Price * item.Quantity),
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            EmailAddress = dto.EmailAddress,
+            AddressLine = dto.AddressLine,
+            Country = dto.Country,
+            State = dto.State,
+            ZipCode = dto.ZipCode,
+            CardName = dto.CardName,
+            CardNumber = dto.CardNumber,
+            Expiration = dto.Expiration,
+            CVV = dto.Cvv,
+            PaymentMethod = dto.PaymentMethod
         };
     }
 }

@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Infrastructure/">
+    <Project Path="EventBus.Message/EventBus.Message.csproj" Id="4389318c-53b0-47bc-baf4-2a0a1bde00ab" />
+  </Folder>
   <Project Path="E:/EDU/Project/eShop/eShop/Basket.API/Basket.API.csproj" Id="cc4fb73e-aa82-4cfe-9137-d6220360f1b7" />
   <Project Path="E:/EDU/Project/eShop/eShop/Catalog.API/Catalog.API.csproj" Id="1af89789-35e0-4280-9482-ac6ac2aafdc3" />
   <Project Path="E:/EDU/Project/eShop/eShop/Discount.API/Discount.API.csproj" Id="ba6d7518-0502-4130-ba9c-303d7b2e06d1" />
