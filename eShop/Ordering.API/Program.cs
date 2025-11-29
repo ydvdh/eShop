@@ -1,6 +1,7 @@
 using EventBus.Message.Common;
 using MassTransit;
 using Ordering.API.Data;
+using Ordering.API.Dispatcher;
 using Ordering.API.EventBusConsumer;
 using Ordering.API.Extensions;
 
@@ -24,6 +25,8 @@ builder.Services.AddInfraServices(builder.Configuration);
 builder.Services.AddMassTransit(config =>
 {
     config.AddConsumer<EventBusRabbitMQConsumer>();
+    config.AddConsumer<PaymentCompletedConsumer>();
+    config.AddConsumer<PaymentFailedConsumer>();
 
     config.UsingRabbitMq((ctx, cfg) =>
     {
@@ -34,8 +37,22 @@ builder.Services.AddMassTransit(config =>
         {
             c.ConfigureConsumer<EventBusRabbitMQConsumer>(ctx);
         });
+
+        //Payment completed Event
+        cfg.ReceiveEndpoint(EventBusConstants.PaymentCompletedQueue, e =>
+        {
+            e.ConfigureConsumer<PaymentCompletedConsumer>(ctx);
+        });
+        //Payment failed event
+        cfg.ReceiveEndpoint(EventBusConstants.PaymentFailedQueue, e =>
+        {
+            e.ConfigureConsumer<PaymentFailedConsumer>(ctx);
+        });
     });
 });
+
+//Register Outbox Message Dispatcher
+builder.Services.AddHostedService<OutboxMessageDispatcher>();
 
 var app = builder.Build();
 

@@ -16,4 +16,10 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         var orderList = await _orderContext.Orders.AsNoTracking() .Where(o => o.UserName == userName).ToListAsync();
         return orderList;
     }
+
+    public async Task AddOutboxMessageAsync(OutboxMessage outboxMessage)
+    {
+        await _orderContext.OutboxMessages.AddAsync(outboxMessage);
+        await _orderContext.SaveChangesAsync();
+    }
 }

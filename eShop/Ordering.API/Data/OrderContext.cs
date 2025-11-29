@@ -10,6 +10,7 @@ public class OrderContext : DbContext
     }
 
     public DbSet<Order> Orders { get; set; }
+    public DbSet<OutboxMessage> OutboxMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,6 +19,16 @@ public class OrderContext : DbContext
         modelBuilder.Entity<Order>()
                 .Property(o => o.Status)
                 .HasConversion<string>();
+
+        modelBuilder.Entity<OutboxMessage>(builder =>
+        {
+            builder.HasKey(x => x.Id);
+            builder.HasIndex(x => x.CorrelationId); //for faster lookups
+            builder.Property(x => x.Type).IsRequired();
+            builder.Property(x => x.Content).IsRequired();
+            builder.Property(x => x.OccurredOn).IsRequired();
+            builder.Property(x => x.ProcessedOn).IsRequired(false);
+        });
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
