@@ -146,4 +146,32 @@ public static class OrderMapper
         };
     }
 
+    internal static OutboxMessage ToOutboxMessageForUpdate(Order orderToUpdate, Guid correlationId)
+    {
+        return new OutboxMessage
+        {
+            CorrelationId = correlationId.ToString(),
+            Type = OutboxMessageTypes.OrderCreated,
+            OccurredOn = DateTime.UtcNow,
+            Content = JsonConvert.SerializeObject(new
+            {
+                orderToUpdate.Id,
+                orderToUpdate.UserName,
+                orderToUpdate.TotalPrice,
+                orderToUpdate.FirstName,
+                orderToUpdate.LastName,
+                orderToUpdate.AddressLine,
+                orderToUpdate.Country,
+                orderToUpdate.State,
+                orderToUpdate.ZipCode,
+                //payment info
+                orderToUpdate.CardName,
+                orderToUpdate.CardNumber,
+                orderToUpdate.Expiration,
+                orderToUpdate.Cvv,
+                orderToUpdate.PaymentMethod,
+                orderToUpdate.Status
+            })
+        };
+    }
 }

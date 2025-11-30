@@ -19,4 +19,8 @@
     <Folder Include="Data\SeedData\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Logging\Common.Logging.csproj" />
+  </ItemGroup>
+
 </Project>

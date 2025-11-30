@@ -1,3 +1,4 @@
+using Gateway.API.Middleware;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
@@ -48,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+app.UseMiddleware<CorrelationIdMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

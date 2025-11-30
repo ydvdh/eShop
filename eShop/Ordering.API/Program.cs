@@ -1,9 +1,11 @@
+using Common.Logging;
 using EventBus.Message.Common;
 using MassTransit;
 using Ordering.API.Data;
 using Ordering.API.Dispatcher;
 using Ordering.API.EventBusConsumer;
 using Ordering.API.Extensions;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +55,9 @@ builder.Services.AddMassTransit(config =>
 
 //Register Outbox Message Dispatcher
 builder.Services.AddHostedService<OutboxMessageDispatcher>();
+
+//Serilog configuration
+builder.Host.UseSerilog(Logging.ConfigureLogger);
 
 var app = builder.Build();
 

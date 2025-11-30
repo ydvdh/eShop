@@ -27,7 +27,10 @@ public class UpdateOrderHandler : IRequestHandler<UpdateOrderCommand, Unit>
 
         orderToUpdate.MapUpdate(request);
         await _orderRepository.UpdateAsync(orderToUpdate);
-     
+
+        var outBoxMessage = OrderMapper.ToOutboxMessageForUpdate(orderToUpdate, request.CorrelationId);
+        await _orderRepository.AddOutboxMessageAsync(outBoxMessage);
+
         _logger.LogInformation($"Order {orderToUpdate.Id} is successfully updated.");
         return Unit.Value;
     }

@@ -5,10 +5,12 @@ using Catalog.API.Handlers;
 using Catalog.API.Repositories;
 using Catalog.API.Repositories.Interface;
 using Catalog.API.Settings;
+using Common.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +43,9 @@ builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddScoped<ITypeRepository, TypeRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddTransient<ICatalogContext, CatalogContext>();
+
+//Serilog configuration
+builder.Host.UseSerilog(Logging.ConfigureLogger);
 
 var app = builder.Build();
 

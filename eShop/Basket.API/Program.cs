@@ -4,8 +4,10 @@ using Basket.API.GrpcServices;
 using Basket.API.Handlers;
 using Basket.API.Repositories;
 using Basket.API.Repositories.Interfaces;
+using Common.Logging;
 using Discount.Grpc.Protos;
 using MassTransit;
+using Serilog;
 using StackExchange.Redis;
 using System.Reflection;
 
@@ -58,6 +60,9 @@ builder.Services.AddMassTransit(config =>
         cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
     });
 });
+
+//Serilog configuration
+builder.Host.UseSerilog(Logging.ConfigureLogger);
 
 var app = builder.Build();
 

@@ -1,9 +1,11 @@
+using Common.Logging;
 using Identity.API.Data;
 using Identity.API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +46,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+
+//Serilog configuration
+builder.Host.UseSerilog(Logging.ConfigureLogger);
 
 var app = builder.Build();
 
